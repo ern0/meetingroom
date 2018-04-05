@@ -1,0 +1,191 @@
+<html>
+
+	<head>
+		<title>
+			meetign room reservation board prototype
+		</title>
+
+		<script type="text/javascript"><!--
+
+
+function pad2(value) {
+	return ("0" + value).slice(-2);
+} // pad2()
+
+
+function refresh() {
+
+	var d = new Date();
+
+	var ye = 1900 + d.getYear();
+	var mo = pad2( d.getMonth() );
+	var da = pad2( d.getDay() );
+
+	var ho = pad2( d.getHours() );
+	var mi = pad2( d.getMinutes() );
+	var se = pad2( d.getSeconds() );
+
+	var date = ye + "." + mo + "." + da;
+	var time = ho + ":" + mi + ":" + se;
+
+	var weekday = new Array(7);
+	weekday[0] =  "Sun";
+	weekday[1] = "Mon";
+	weekday[2] = "Tue";
+	weekday[3] = "Wed";
+	weekday[4] = "Thu";
+	weekday[5] = "Fri";
+	weekday[6] = "Sat";
+	var dow = weekday[d.getDay()];
+
+	document.getElementById("dow").innerHTML = dow;
+	///document.getElementById("date").innerHTML = date;
+	///document.getElementById("time").innerHTML = time;
+
+	///setTimeout(refresh,100);
+
+} // refresh()
+
+// window.onload = refresh;
+
+		//--></script>
+
+		<style type="text/css"><!--
+
+body {
+	padding: 0;
+	margin: 0;
+	border: none;
+	background: #eeeeee;
+}
+#screen {
+	background: #ffffff;
+	width: 400px;
+	height: 400px;
+	padding: 0;
+	margin: 0;
+}
+
+#heading {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+#logo, #logo > img {
+	-border: 1px solid red;
+	padding-left: 0;
+	width: 75px;
+}
+#title {
+	font-family: Serif;
+	font-size: 35px;
+	text-align: center;
+}
+#dow {
+	-border: 1px solid red;
+	padding-left: 2px;
+	width: 1%;
+	text-align: center;
+	font-family: Serif;
+	font-size: 20px;
+	border-left: 2px solid black;
+}
+
+#calendar {
+	border-top: 2px solid black;
+	width: 100%;
+	border-collapse: collapse;
+}
+.cstamp, .cdesc {
+	border-bottom: 2px solid black;
+	font-family: monospace;
+	font-size: 23px;
+}
+.cstamp {
+	border-right: 2px solid black;
+	text-align: center;
+	width: 16%;
+	padding-right: 2px;
+}
+.now {
+	background: black;
+	color: white;
+	font-weight: bold;
+}
+.cdesc {
+	padding-left: 4px;
+	vertical-align: top;
+}
+		--></style>
+
+	</head>
+
+	<body><div id="screen">
+
+		<table id="heading" cellpadding="0" cellspacing="0"><tr>
+			<td id="logo"><img src="cae.png" /></td>
+			<td id="title">Kilocalories</td>
+
+			<td id="dow">
+				Wed
+			</td>
+
+		</tr></table>
+
+		<table id="calendar" cellpadding="0" cellspacing="0">
+			<tr>
+				<td class="cstamp">09:00</td>
+				<td class="cdesc">  </td>
+			</tr>
+			<tr>
+				<td class="cstamp">10:00</td>
+				<td class="cdesc" rowspan="4">
+					Long meeting, don't forget order your lunch
+				</td>
+			</tr>
+			<tr>
+				<td class="cstamp">11:00</td>
+				<!-- rowspan -->
+			</tr>
+
+			<tr>
+				<td class="cstamp">12:00</td>
+				<!-- rowspan -->
+			</tr>
+			<tr>
+				<td class="cstamp">13:00</td>
+				<!-- rowspan -->
+			</tr>
+			<tr>
+				<td class="cstamp">14:00</td>
+				<td class="cdesc"> Short meeting (mlali) </td>
+			</tr>
+			<tr>
+				<td class="cstamp now">15:00</td>
+				<td class="cdesc"> Another meeting </td>
+			</tr>
+			<tr>
+				<td class="cstamp">16:00</td>
+				<td class="cdesc">  </td>
+			</tr>
+			<tr>
+				<td class="cstamp">17:00</td>
+				<td class="cdesc">  </td>
+			</tr>
+			<tr>
+				<td class="cstamp">18:00</td>
+				<td class="cdesc">  </td>
+			</tr>
+			<tr>
+				<td class="cstamp">19:00</td>
+				<td class="cdesc">  </td>
+			</tr>
+			<tr>
+				<td class="cstamp">20:00</td>
+				<td class="cdesc">  </td>
+			</tr>
+		</table>
+
+	</div></body>
+
+</html>
