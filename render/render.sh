@@ -8,8 +8,10 @@ function main {
 		xvfb-run -a --server-args="-screen 0, 800x600x24" \
 			wkhtmltoimage -q meetingroom.html _raw.png
 	else
-		wkhtmltoimage -q meetingroom.html _raw.png
+		wkhtmltoimage --zoom 1.0 -q meetingroom.html _raw.png
 	fi
+
+	rm -f meetingroom.png
 
 	#############
 	c1
@@ -17,7 +19,8 @@ function main {
 
 	convert meetingroom.png \
 		-define histogram:unique-colors=true \
-		-format %c histogram:info:-
+		-format %c histogram:info:- \
+		| wc -l
 
 	file meetingroom.png
 
@@ -43,9 +46,8 @@ function c2 {
 	convert _raw.png \
 		-resize 50% \
 		-crop 200x200+0+0 \
-		-colors 2 \
-		-quality 100 \
-		-type bilevel \
+		-type grayscale \
+		-threshold 70% \
 		meetingroom.png
 }
 

@@ -50,6 +50,7 @@ function refresh() {
 
 		//--></script>
 
+
 		<style type="text/css"><!--
 
 body {
@@ -83,6 +84,8 @@ td {
 	font-family: Serif;
 	font-size: 35px;
 	text-align: center;
+	color: #222222;
+	font-weight: bold;
 }
 #dow {
 	-border: 1px solid red;
@@ -90,8 +93,11 @@ td {
 	width: 1%;
 	text-align: center;
 	font-family: Serif;
-	font-size: 20px;
+	font-size: 22px;
 	border-left: 2px solid black;
+	-font-weight: bold;
+	color: white;
+	background: #888888;
 }
 
 #calendar {
@@ -103,6 +109,8 @@ td {
 	border-bottom: 1px solid black;
 	font-family: monospace;
 	font-size: 24px;
+	font-weight: bold;
+	color: #666666;
 }
 .cstamp {
 	border-right: 1px solid black;
@@ -111,7 +119,7 @@ td {
 	padding-right: 2px;
 }
 .now {
-	background: black;
+	background: gray;
 	color: white;
 	font-weight: bold;
 }
@@ -143,7 +151,7 @@ td {
 			<tr>
 				<td class="cstamp">10:00</td>
 				<td class="cdesc" rowspan="4">
-					Long meeting, don't forget order your lunch
+					Long meeting, don't forget to order your lunch
 				</td>
 			</tr>
 			<tr>
