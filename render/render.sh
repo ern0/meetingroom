@@ -1,7 +1,7 @@
 #!/bin/bash
 clear
 
-xvfb-run -a --server-args="-screen 0, 800x600x24" /usr/bin/wkhtmltoimage -q meetingroom.html _raw.png
+xvfb-run -a --server-args="-screen 0, 800x600x24" wkhtmltoimage -q meetingroom.html _raw.png
 
 convert _raw.png \
 	-resize 50% \
