@@ -1,50 +1,12 @@
 <html>
 
 	<head>
+		<meta charset="UTF-8">
 		<title>
 			meetign room reservation board prototype
 		</title>
 
 		<script type="text/javascript"><!--
-
-
-function pad2(value) {
-	return ("0" + value).slice(-2);
-} // pad2()
-
-
-function refresh() {
-
-	var d = new Date();
-
-	var ye = 1900 + d.getYear();
-	var mo = pad2( d.getMonth() );
-	var da = pad2( d.getDay() );
-
-	var ho = pad2( d.getHours() );
-	var mi = pad2( d.getMinutes() );
-	var se = pad2( d.getSeconds() );
-
-	var date = ye + "." + mo + "." + da;
-	var time = ho + ":" + mi + ":" + se;
-
-	var weekday = new Array(7);
-	weekday[0] = "Sun";
-	weekday[1] = "Mon";
-	weekday[2] = "Tue";
-	weekday[3] = "Wed";
-	weekday[4] = "Thu";
-	weekday[5] = "Fri";
-	weekday[6] = "Sat";
-	var dow = weekday[d.getDay()];
-
-	document.getElementById("dow").innerHTML = dow;
-	///document.getElementById("date").innerHTML = date;
-	///document.getElementById("time").innerHTML = time;
-
-	///setTimeout(refresh,100);
-
-} // refresh()
 
 // window.onload = refresh;
 
@@ -61,8 +23,8 @@ body {
 }
 #screen {
 	background: #ffffff;
-	width: 400px;
-	height: 400px;
+	width: 200px;
+	height: 200px;
 	padding: 0;
 	margin: 0;
 }
@@ -78,23 +40,23 @@ td {
 #logo, #logo > img {
 	-border: 1px solid red;
 	padding-left: 0;
-	width: 75px;
+	width: 42px;
 }
 #title {
 	font-family: Serif;
-	font-size: 35px;
+	font-size: 21px;
 	text-align: center;
-	color: #222222;
+	color: #333333;
 	font-weight: bold;
 }
 #dow {
 	-border: 1px solid red;
-	padding-left: 2px;
+	padding-left: 1px;
 	width: 1%;
 	text-align: center;
 	font-family: Serif;
-	font-size: 22px;
-	border-left: 2px solid black;
+	font-size: 11px;
+	border-left: 1px solid black;
 	-font-weight: bold;
 	color: white;
 	background: #888888;
@@ -106,14 +68,16 @@ td {
 	border-collapse: collapse;
 }
 .cstamp, .cdesc {
+	padding: 1px 0 0 0;
 	border-bottom: 1px solid black;
 	font-family: monospace;
-	font-size: 24px;
+	font-size: 12px;
 	font-weight: bold;
-	color: #666666;
+	color: #444444;
 }
 .cstamp {
 	border-right: 1px solid black;
+	vertical-align: top;
 	text-align: center;
 	width: 16%;
 	padding-right: 2px;
@@ -123,8 +87,12 @@ td {
 	color: white;
 	font-weight: bold;
 }
+.nob {
+	border-bottom: none;
+	padding-bottom: 1px;
+}
 .cdesc {
-	padding-left: 4px;
+	padding-left: 1px;
 	vertical-align: top;
 }
 		--></style>
@@ -134,47 +102,67 @@ td {
 	<body><div id="screen">
 
 		<table id="heading" cellpadding="0" cellspacing="0"><tr>
-			<td id="logo"><img src="cae.png" /></td>
-			<td id="title">Kilocalories</td>
 
-			<td id="dow">
-				Wed
-			</td>
+			<td id="logo"><img src="cae.png" /></td>
+			<td id="title">Tonaludatus</td>
+			<td id="dow">Wed</td>
 
 		</tr></table>
 
 		<table id="calendar" cellpadding="0" cellspacing="0">
+
 			<tr>
 				<td class="cstamp">09:00</td>
 				<td class="cdesc">  </td>
 			</tr>
+
+
 			<tr>
-				<td class="cstamp">10:00</td>
-				<td class="cdesc" rowspan="4">
-					Long meeting, don't forget to order your lunch
+				<td class="cstamp nob now">10:00</td>
+				<td class="cdesc nob">
+					Long meeting, don't 
 				</td>
 			</tr>
 			<tr>
-				<td class="cstamp">11:00</td>
-				<!-- rowspan -->
+				<td class="cstamp nob"> 11:00 </td>
+				<td class="cdesc nob">
+					forget to order your
+				</td>
+			</tr>
+			<tr>
+				<td class="cstamp nob"> 12:00 </td>
+				<td class="cdesc nob">
+					lunch
+				</td>
+			</tr>
+			<tr>
+				<td class="cstamp"> 13:00 </td>
+				<td class="cdesc">
+					
+				</td>
 			</tr>
 
+
 			<tr>
-				<td class="cstamp">12:00</td>
-				<!-- rowspan -->
+				<td class="cstamp nob">14:00</td>
+				<td class="cdesc nob"> 
+					Short meeting with
+				</td>
 			</tr>
 			<tr>
-				<td class="cstamp">13:00</td>
-				<!-- rowspan -->
+				<td class="cstamp"> </td>
+				<td class="cdesc"> 
+					long description
+				</td>
 			</tr>
+
+
 			<tr>
-				<td class="cstamp">14:00</td>
-				<td class="cdesc"> Short meeting (mlali) </td>
-			</tr>
-			<tr>
-				<td class="cstamp now">15:00</td>
+				<td class="cstamp">15:00</td>
 				<td class="cdesc"> Another meeting </td>
 			</tr>
+
+
 			<tr>
 				<td class="cstamp">16:00</td>
 				<td class="cdesc">  </td>
@@ -187,14 +175,12 @@ td {
 				<td class="cstamp">18:00</td>
 				<td class="cdesc">  </td>
 			</tr>
+
 			<tr>
 				<td class="cstamp">19:00</td>
-				<td class="cdesc">  </td>
+				<td class="cdesc">0123456789012345678901</td>
 			</tr>
-			<tr>
-				<td class="cstamp">20:00</td>
-				<td class="cdesc">  </td>
-			</tr>
+	
 		</table>
 
 	</div></body>
