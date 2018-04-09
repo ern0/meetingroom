@@ -6,14 +6,22 @@
 			meetign room reservation board prototype
 		</title>
 
-		<script type="text/javascript"><!--
+
+		<script type="text/javascript">
 
 // window.onload = refresh;
 
-		//--></script>
+		</script>
 
 
-		<style type="text/css"><!--
+		<style type="text/css">
+
+@font-face {
+  font-family: 'Custom';
+  font-style: normal;
+  font-weight: 400;
+  src: url(unscii-8.woff) format('woff');
+}
 
 body {
 	padding: 0;
@@ -67,13 +75,15 @@ td {
 	width: 100%;
 	border-collapse: collapse;
 }
+.row {
+	height: 8px;
+}
 .cstamp, .cdesc {
 	padding: 1px 0 0 0;
 	border-bottom: 1px solid black;
-	font-family: monospace;
-	font-size: 12px;
-	font-weight: bold;
-	color: #444444;
+	font-family: Custom;
+	color: black;
+	font-style: underline;
 }
 .cstamp {
 	border-right: 1px solid black;
@@ -95,7 +105,8 @@ td {
 	padding-left: 1px;
 	vertical-align: top;
 }
-		--></style>
+	</style>
+
 
 	</head>
 
@@ -111,31 +122,31 @@ td {
 
 		<table id="calendar" cellpadding="0" cellspacing="0">
 
-			<tr>
+			<tr class="row">
 				<td class="cstamp">09:00</td>
 				<td class="cdesc">  </td>
 			</tr>
 
 
-			<tr>
+			<tr class="row">
 				<td class="cstamp nob now">10:00</td>
 				<td class="cdesc nob">
 					Long meeting, don't 
 				</td>
 			</tr>
-			<tr>
+			<tr class="row">
 				<td class="cstamp nob"> 11:00 </td>
 				<td class="cdesc nob">
 					forget to order your
 				</td>
 			</tr>
-			<tr>
+			<tr class="row">
 				<td class="cstamp nob"> 12:00 </td>
 				<td class="cdesc nob">
 					lunch
 				</td>
 			</tr>
-			<tr>
+			<tr class="row">
 				<td class="cstamp"> 13:00 </td>
 				<td class="cdesc">
 					
@@ -143,13 +154,13 @@ td {
 			</tr>
 
 
-			<tr>
+			<tr class="row">
 				<td class="cstamp nob">14:00</td>
 				<td class="cdesc nob"> 
 					Short meeting with
 				</td>
 			</tr>
-			<tr>
+			<tr class="row">
 				<td class="cstamp"> </td>
 				<td class="cdesc"> 
 					long description
@@ -157,26 +168,26 @@ td {
 			</tr>
 
 
-			<tr>
+			<tr class="row">
 				<td class="cstamp">15:00</td>
 				<td class="cdesc"> Another meeting </td>
 			</tr>
 
 
-			<tr>
+			<tr class="row">
 				<td class="cstamp">16:00</td>
 				<td class="cdesc">  </td>
 			</tr>
-			<tr>
+			<tr class="row">
 				<td class="cstamp">17:00</td>
 				<td class="cdesc">  </td>
 			</tr>
-			<tr>
+			<tr class="row">
 				<td class="cstamp">18:00</td>
 				<td class="cdesc">  </td>
 			</tr>
 
-			<tr>
+			<tr class="row">
 				<td class="cstamp">19:00</td>
 				<td class="cdesc">0123456789012345678901</td>
 			</tr>
