@@ -1,21 +1,18 @@
 @font-face {
-  font-family: "unscii-8";
+  font-family: "pixel";
   font-style: normal;
   font-weight: 400;
-  src: url(font/unscii-8.woff) format("woff");
+  src: url(font/unscii-8.woff) format('woff');
 }
+
+
 @font-face {
-  font-family: "unscii-8-tall";
+  font-family: 'Bevan';
   font-style: normal;
   font-weight: 400;
-  src: url(font/unscii-8-tall.woff) format("woff");
+  src: url(font/Bevan.woff2) format('woff2'), url(font/Bevan.ttf) format('TrueType');
 }
-@font-face {
-  font-family: 'unscii-8-tall';
-  font-style: normal;
-  font-weight: 400;
-  src: url(font/unscii-8-tall.woff) format("woff");
-}
+
 body {
 	padding: 0;
 	margin: 0;

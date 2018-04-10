@@ -14,8 +14,8 @@
 }
 #title {
 	border: 1px solid red;
-	font-family: unscii-16-full;
-	font-size: 1.4em;
+	font-family: "Bevan";
+	font-size: 28px;
 	text-align: center;
 	color: #000000;
 }
@@ -31,38 +31,26 @@
 	color: white;
 	background: #888888;
 }
-
+/*****************************************************/
 #calendar > tbody > tr {
-	border-bottom: 1px solid black;
-}
-.stamp, .desc {
-	line-height: 12px;
-	position: relative;
-	top: 5px;
-
-	padding: 0px 0 0 0;
-	font-family: Custom;
-	color: black;
-}
-.cstamp {
-	border-right: 1px solid black;
+	font-family: pixel;
+	padding: 0 0 0 0;
 	vertical-align: top;
+	border-bottom: 1px solid black;
+	color: #000000;
+}
+.join {
+	border-bottom: none;
+	padding-bottom: 1px;
+}
+.stamp {
+	border-right: 1px solid black;
 	text-align: center;
 	width: 16%;
 	padding-right: 2px;
 }
 .now {
-	position: relative;
-	top: 4px;
 	background: black;
 	color: white;
 	font-weight: bold;
-}
-.nob {
-	border-bottom: none;
-	padding-bottom: 1px;
-}
-.cdesc {
-	padding-left: 1px;
-	vertical-align: top;
 }
