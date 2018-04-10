@@ -6,36 +6,51 @@
 #heading {
 	width: 100%;
 	border-collapse: collapse;
+	border-bottom: 1px solid #000000;
+	height: 36px;
 }
-#logo, #logo > img {
-	-border: 1px solid red;
-	padding-left: 0;
+#today {
 	width: 42px;
+	color: #ffffff;
+	background: #444444;
+	border-right: 1px solid #000000;
+	padding-top: 3px;
+}
+.corner {
+	text-align: center;
+	font-family: pixel;
+	height: 10px;
 }
 #title {
-	border: 1px solid red;
-	font-family: "Bevan";
-	font-size: 28px;
-	text-align: center;
-	color: #000000;
-}
-#dow {
 	-border: 1px solid red;
-	padding-left: 1px;
-	width: 1%;
+	font-family: "Bevan";
+	font-size: 20px;
 	text-align: center;
-	font-family: Serif;
-	font-size: 11px;
-	border-left: 1px solid black;
-	-font-weight: bold;
-	color: white;
-	background: #888888;
+	color: #666666;
+	position: relative;
+	top: 2px;
+	vertical-align: bottom;
+}
+#logopadding {
+	width: 22px;
+	-background: #aaaaaa;
+}
+#logo {
+	position: absolute;
+	top: 0;
+	left: 160px;
+	width: 40px;
 }
 /*****************************************************/
-#calendar > tbody > tr {
+.fontbox {
 	font-family: pixel;
-	padding: 0 0 0 0;
-	vertical-align: top;
+	height: 10px;
+	width: 100%;
+	position: relative;
+	top: 1px;
+}
+.stamp, .desc {
+	padding: 1px 0 1px 0;
 	border-bottom: 1px solid black;
 	color: #000000;
 }
@@ -44,13 +59,21 @@
 	padding-bottom: 1px;
 }
 .stamp {
-	border-right: 1px solid black;
+	width: 42px;  /* 1+ 5x8 +1 */
 	text-align: center;
-	width: 16%;
-	padding-right: 2px;
+	border-right: 1px solid black;
 }
 .now {
 	background: black;
 	color: white;
 	font-weight: bold;
+}
+.desc {
+	width: 155px;
+	text-align: left;
+	padding-left: 2px;
+}
+.footer {
+	padding-top: 4px;
+	text-align: center;	
 }
