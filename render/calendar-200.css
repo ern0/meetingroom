@@ -1,0 +1,68 @@
+#screen {
+	width: 200px;
+	height: 200px;
+}
+
+#heading {
+	width: 100%;
+	border-collapse: collapse;
+}
+#logo, #logo > img {
+	-border: 1px solid red;
+	padding-left: 0;
+	width: 42px;
+}
+#title {
+	border: 1px solid red;
+	font-family: unscii-16-full;
+	font-size: 1.4em;
+	text-align: center;
+	color: #000000;
+}
+#dow {
+	-border: 1px solid red;
+	padding-left: 1px;
+	width: 1%;
+	text-align: center;
+	font-family: Serif;
+	font-size: 11px;
+	border-left: 1px solid black;
+	-font-weight: bold;
+	color: white;
+	background: #888888;
+}
+
+#calendar > tbody > tr {
+	border-bottom: 1px solid black;
+}
+.stamp, .desc {
+	line-height: 12px;
+	position: relative;
+	top: 5px;
+
+	padding: 0px 0 0 0;
+	font-family: Custom;
+	color: black;
+}
+.cstamp {
+	border-right: 1px solid black;
+	vertical-align: top;
+	text-align: center;
+	width: 16%;
+	padding-right: 2px;
+}
+.now {
+	position: relative;
+	top: 4px;
+	background: black;
+	color: white;
+	font-weight: bold;
+}
+.nob {
+	border-bottom: none;
+	padding-bottom: 1px;
+}
+.cdesc {
+	padding-left: 1px;
+	vertical-align: top;
+}
