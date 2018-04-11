@@ -11,8 +11,8 @@
 }
 #today {
 	width: 42px;
-	color: #ffffff;
-	background: #444444;
+	color: #cccccc;
+	background: #333333;
 	border-right: 1px solid #000000;
 	padding-top: 3px;
 }
@@ -26,14 +26,14 @@
 	font-family: "Bevan";
 	font-size: 20px;
 	text-align: center;
-	color: #666666;
+	color: #222222;
 	position: relative;
 	top: 2px;
 	vertical-align: bottom;
 }
 #logopadding {
-	width: 22px;
-	-background: #aaaaaa;
+	width: 23px;
+	background: #aaaaaa;
 }
 #logo {
 	position: absolute;
@@ -64,8 +64,8 @@
 	border-right: 1px solid black;
 }
 .stampnow {
-	background: #cc0000;
-	color: #ffffff;
+	background: #ff0000;
+	color: #cccccc;
 }
 .desc {
 	width: 155px;
@@ -73,5 +73,5 @@
 	padding-left: 2px;
 }
 .descnow {
-	color: #cc0000;
+	color: #ff0000;
 }
