@@ -33,7 +33,7 @@
 }
 #logopadding {
 	width: 23px;
-	background: #aaaaaa;
+	-background: #aaaaaa;
 }
 #logo {
 	position: absolute;
