@@ -12,9 +12,8 @@ rm -f meetingroom.png
 
 convert _raw.png \
 	-crop 200x200+0+0 \
-	+dither \
+	-dither FloydSteinberg \
 	-remap palette.png \
-	-quality 100 \
 	meetingroom.png
 
 convert meetingroom.png \
