@@ -2,7 +2,7 @@
 clear
 
 if [[ -f /usr/bin/xvfb-run ]]; then
-	xvfb-run -a --server-args="-screen 0, 800x600x24" \
+	xvfb-run -a --server-args="-screen 0, 800x600x8" \
 		wkhtmltoimage -q meetingroom.html _raw.png
 else
 	wkhtmltoimage -q meetingroom.html _raw.png
