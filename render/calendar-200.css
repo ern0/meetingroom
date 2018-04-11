@@ -63,17 +63,15 @@
 	text-align: center;
 	border-right: 1px solid black;
 }
-.now {
-	background: black;
-	color: white;
-	font-weight: bold;
+.stampnow {
+	background: #cc0000;
+	color: #ffffff;
 }
 .desc {
 	width: 155px;
 	text-align: left;
 	padding-left: 2px;
 }
-.footer {
-	padding-top: 4px;
-	text-align: center;	
+.descnow {
+	color: #cc0000;
 }

@@ -13,9 +13,8 @@ rm -f meetingroom.png
 convert _raw.png \
 	-crop 200x200+0+0 \
 	+dither \
-	-colors 2 \
+	-remap palette.png \
 	-quality 100 \
-	-type bilevel \
 	meetingroom.png
 
 convert meetingroom.png \
