@@ -3,9 +3,11 @@
 import sys
 sys.dont_write_bytecode = True
 import os
+import time
 
 from importmodule import importmodule
 import render.render
+import importer.importer
 
 
 class Application:
@@ -15,21 +17,26 @@ class Application:
 
 		self.about()
 		self.loadConfig(sys.argv[1])
+		self.createWorkDir()
+
+		for i in self.config.imports:
+			print(i)
 
 
 	def fatal(self,msg):
-		print(msg)
+
+		if sys.exc_info()[1] is None:
+			print(msg)
+		else:
+			print(msg + " - " + str( sys.exc_info()[1] ))
+
 		os._exit(1)
 
 
 	def about(self):
 
 		if len(sys.argv) == 2: return
-
-		self.fatal(
-			os.path.basename(sys.argv[0])
-			+ " <config.json>"
-		)
+		self.fatal("config not specified")
 
 
 	def loadConfig(self,fnam):
@@ -37,16 +44,20 @@ class Application:
 		try:
 			self.config = importmodule(fnam)
 		except:
-			self.fatal(
-				"bad config: " 
-				+ fnam 
-				+ " - "
-				+ str( sys.exc_info()[1] )
-			)
+			self.fatal("bad config: " + fnam)
 
 
-		print(self.config.imports)
-		print(self.config.devices)
+	def createWorkDir(self):
+
+		try: wd = self.config.workdir
+		except: wd = "/tmp/meetingroom"
+
+		try:
+			os.makedirs(wd)
+		except FileExistsError:
+			pass
+		except:
+			self.fatal("failed to create workdir: " + wd)
 
 
 if __name__ == "__main__":
