@@ -27,35 +27,41 @@
 	"devices": [
 
 		{
-			"group": "kilo-dual",
-			"device": "kilo-top",
+			"group": "kilo-double",
 			"room": "kilo",
 			"render": "image",
-			"header": true,
 			"title": "Kilo",
-			"cols": 23,
-			"rows": 15
-		},
-		{
-			"group": "kilo-dual",
-			"device": "kilo-bottom",
-			"room": "kilo",
-			"render": "image",
-			"header": false,
-			"title": "Kilo",
-			"cols": 23,
-			"rows": 18
+			"parts": [
+				{
+					"device": "kilo-top",
+					"template": "cal-200x200bwr-top",
+					"cols": 23,
+					"rows": 15
+				},
+				{
+					"device": "kilo-top",
+					"template": "cal-200x200bwr-bottom",
+					"cols": 23,
+					"rows": 18
+				}
+			]
 		},
 
 		{
-			"device": "kilo-led",
+			"group": "kilo-led",
 			"room": "kilo",
 			"render": "led",
-			"brightness": 30,
-			"slot-start": 800,
-			"slot-length": 30,
-			"slot-number": 16
+			"parts": [
+				{
+					"device": "kilo-led",
+					"brightness": 30,
+					"slot-start": 800,
+					"slot-length": 30,
+					"slot-number": 16
+				},
+			]
 		}
+
 	]
 
 }

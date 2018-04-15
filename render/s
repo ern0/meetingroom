@@ -1,6 +1,0 @@
-#!/bin/bash
-clear
-
-./render.py \
-	calendar-prepared.json \
-	meetingroom.png

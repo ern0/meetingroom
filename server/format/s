@@ -1,0 +1,4 @@
+#!/bin/bash
+clear
+
+./format.py input output

@@ -14,8 +14,12 @@ class Application:
 
 		configFileName = sys.argv[1]
 		stamp = sys.argv[2]
+
 		self.config = json.load(open(configFileName))
-		outputFileName = self.config["workdir"] + "/" + stamp + "/agenda-"
+
+		outputDir = self.config["workdir"] + "/" + stamp
+		try: os.makedirs(outputDir)
+		except: pass
 
 		fake = {
 			"agenda": [
@@ -40,9 +44,9 @@ class Application:
 				fake["room"] = room
 				fake["stamp"] = stamp
 
-				fnam = outputFileName + room + ".json"
-				with open(fnam,"w") as outfile:
-					json.dump(fake,outfile)
+				fnam = outputDir + "/agenda-" + room + ".json"
+				with open(fnam,"w") as outFile:
+					json.dump(fake,outFile)
 
 
 if __name__ == "__main__":
