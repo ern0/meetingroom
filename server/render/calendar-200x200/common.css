@@ -1,0 +1,26 @@
+@font-face {
+  font-family: "pixel";
+  font-style: normal;
+  font-weight: 400;
+  src: url(font/unscii-8.woff) format('woff');
+}
+
+
+@font-face {
+  font-family: 'Bevan';
+  font-style: normal;
+  font-weight: 400;
+  src: url(font/Bevan.woff2) format('woff2'), url(font/Bevan.ttf) format('TrueType');
+}
+
+body {
+	padding: 0;
+	margin: 0;
+	border: none;
+	background: #eeeeee;
+}
+#screen {
+	background: #ffffff;
+	padding: 0;
+	margin: 0;
+}

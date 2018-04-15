@@ -1,0 +1,5 @@
+#!/bin/bash
+clear
+
+mkdir -p /tmp/meetingroom/20180315
+./import.py ../config.json 20180315
