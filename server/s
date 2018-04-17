@@ -1,0 +1,4 @@
+#!/bin/bash
+clear
+
+./dispatcher.py config.json

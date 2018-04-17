@@ -1,0 +1,5 @@
+#!/bin/bash
+clear
+
+find /tmp/meetingroom | sort
+cat /tmp/meetingroom/*kilo*
