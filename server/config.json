@@ -1,8 +1,8 @@
 {
 	"workdir": "/tmp/meetingroom",
-	
+
 	"import": [
-	
+
 		{
 			"url": "calendar.google.com/xyz",
 			"parser": "google",
@@ -58,7 +58,7 @@
 					"slot-start": 800,
 					"slot-length": 30,
 					"slot-number": 16
-				},
+				}
 			]
 		}
 
