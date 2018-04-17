@@ -151,7 +151,7 @@ class Dispatcher:
 		).decode("utf-8")
 
 		# delete request file
-		##os.remove(reqFileName)
+		os.remove(reqFileName)
 
 
 if __name__ == "__main__":
