@@ -1,5 +1,7 @@
 {
 	"workdir": "/tmp/meetingroom",
+	"production": false,
+
 
 	"import": [
 

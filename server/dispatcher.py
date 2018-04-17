@@ -93,6 +93,7 @@ class Dispatcher:
 		importIndex = 0
 		for importItem in self.config["import"]:
 			importItem["index"] = importIndex
+			importItem["production"] = self.config["production"]
 			self.fetchImportItem(importItem)
 			importIndex += 1
 
@@ -151,7 +152,8 @@ class Dispatcher:
 		).decode("utf-8")
 
 		# delete request file
-		os.remove(reqFileName)
+		if self.config["production"]:
+			os.remove(reqFileName)
 
 
 if __name__ == "__main__":
