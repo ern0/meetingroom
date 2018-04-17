@@ -5,7 +5,7 @@
 
 		{
 			"active": true,
-			"app": "import/import.py",
+			"fetcher": "import/import.py",
 			"url": "calendar.google.com/xyz",
 			"mapping": [
 					{ "google-id": "23", "room": "kilo" },
@@ -16,11 +16,11 @@
 
 		{
 			"active": false,
-			"app": "import/importwiki",
+			"fetcher": "import/importwiki",
 			"url": "wiki.cae.hu/wikipage",
 			"mapping": [
 				{ "row": 1, "room": "bingo" },
-				{ "row": 2, "room": "hotel"}
+				{ "row": 2, "room": "hotel" }
 			]
 
 		}
@@ -34,7 +34,7 @@
 			"room": "kilo",
 			"render": "image",
 			"title": "Kilo",
-			"parts": [
+			"slices": [
 				{
 					"device": "kilo-top",
 					"template": "cal-200x200bwr-top",
@@ -54,7 +54,7 @@
 			"group": "kilo-led",
 			"room": "kilo",
 			"render": "led",
-			"parts": [
+			"slices": [
 				{
 					"device": "kilo-led",
 					"brightness": 30,

@@ -7,6 +7,7 @@ import time
 import json
 import datetime
 import subprocess
+import fnmatch
 
 
 class Dispatcher:
@@ -52,6 +53,15 @@ class Dispatcher:
 
 		self.configFileName = os.path.abspath(fnam)
 
+		self.reqPrefix = os.path.abspath(
+			self.config["workdir"] 
+			+ "/agenda-request-"
+		)
+		self.dataPrefix = os.path.abspath(
+			self.config["workdir"] 
+			+ "/agenda-data-"
+		)
+
 
 	def createWorkDir(self):
 
@@ -79,8 +89,25 @@ class Dispatcher:
 	def fetchImportData(self):
 
 		self.updateStamp()
+
+		importIndex = 0
 		for importItem in self.config["import"]:
+			importItem["index"] = importIndex
 			self.fetchImportItem(importItem)
+			importIndex += 1
+
+		for importItem in self.config["import"]:
+			for mappingItem in importItem["mapping"]:
+				fnam = self.mkDataFnam( mappingItem["room"] )
+				print(fnam)
+
+
+	def mkReqFnam(self,index):
+		return self.reqPrefix + str(index) + ".json"
+
+
+	def mkDataFnam(self,room):
+		return self.dataPrefix + room + ".json"
 
 
 	def fetchImportItem(self,importItem):
@@ -97,7 +124,7 @@ class Dispatcher:
 
 		importItemName += (
 			" import"
-			+ " app=" + importItem["app"]
+			+ " fetcher=" + importItem["fetcher"]
 			+ " url=" + importItem["url"]
 		)
 
@@ -106,14 +133,25 @@ class Dispatcher:
 
 	def performFetchImportItem(self,importItem):
 
-		app = os.path.abspath( importItem["app"] )
-		url = importItem["url"]
+		# insert output file names into config
+		for mappingItem in importItem["mapping"]:
+			fnam = self.mkDataFnam( mappingItem["room"] )
+			mappingItem["filename"] = fnam
 
-		subprocess.check_output([app,self.configFileName])
-		print([app,self.configFileName])
+		# create request file
+		reqFileName = self.mkReqFnam( importItem["index"] )
+		with open(reqFileName,"w") as reqFile:
+			json.dump(importItem,reqFile)
 
-		# check md5
-		# call format app
+		# call import app
+		app = os.path.abspath(importItem["fetcher"]) 
+		subprocess.check_output(
+			app + " " + reqFileName
+			,shell = True
+		).decode("utf-8")
+
+		# delete request file
+		##os.remove(reqFileName)
 
 
 if __name__ == "__main__":

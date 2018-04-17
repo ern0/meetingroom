@@ -6,15 +6,13 @@ import os
 import time
 import json
 import datetime
+import random
 
 
 class Import:
 
 
 	def main(self):
-
-		configFileName = sys.argv[1]
-		self.config = json.load(open(configFileName))
 
 		now = datetime.datetime.now()
 		self.date = (
@@ -23,11 +21,7 @@ class Import:
 			+ str(now.day).zfill(2)
 		)
 
-		outputDir = self.config["workdir"]
-		try: os.makedirs(outputDir)
-		except: pass
-
-		fake = {
+		result = {
 			"agenda": [
 
 				{
@@ -44,15 +38,23 @@ class Import:
 			]
 		}
 
-		for importItem in self.config["import"]:
-			for mappingItem in importItem["mapping"]:
-				room = mappingItem["room"]
-				fake["room"] = room
-				fake["date"] = self.date
+		importItem = json.load(open(sys.argv[1]))
 
-				fnam = outputDir + "/agenda-data-" + room + ".json"
-				with open(fnam,"w") as outFile:
-					json.dump(fake,outFile)
+		for mappingItem in importItem["mapping"]:
+
+			room = mappingItem["room"]
+			fnam = mappingItem["filename"]
+
+			result["room"] = room
+			result["date"] = self.date
+
+			# simulate some change
+			if room == "kilo":
+				r = str(random.randrange(300))
+				result["agenda"][0]["desc"] += " - " + r
+
+			with open(fnam,"w") as outFile:
+				json.dump(result,outFile)
 
 
 if __name__ == "__main__":
