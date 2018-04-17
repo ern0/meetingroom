@@ -5,19 +5,25 @@ sys.dont_write_bytecode = True
 import os
 import time
 import json
+import datetime
 
 
-class Application:
+class Import:
 
 
 	def main(self):
 
 		configFileName = sys.argv[1]
-		stamp = sys.argv[2]
-
 		self.config = json.load(open(configFileName))
 
-		outputDir = self.config["workdir"] + "/" + stamp
+		now = datetime.datetime.now()
+		self.date = (
+			str(now.year)
+			+ str(now.month).zfill(2)
+			+ str(now.day).zfill(2)
+		)
+
+		outputDir = self.config["workdir"]
 		try: os.makedirs(outputDir)
 		except: pass
 
@@ -42,15 +48,15 @@ class Application:
 			for mappingItem in importItem["mapping"]:
 				room = mappingItem["room"]
 				fake["room"] = room
-				fake["stamp"] = stamp
+				fake["date"] = self.date
 
-				fnam = outputDir + "/agenda-" + room + ".json"
+				fnam = outputDir + "/agenda-data-" + room + ".json"
 				with open(fnam,"w") as outFile:
 					json.dump(fake,outFile)
 
 
 if __name__ == "__main__":
 	try:
-		(Application()).main()
+		(Import()).main()
 	except KeyboardInterrupt:
 		print(" - aborted")

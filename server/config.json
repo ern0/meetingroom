@@ -4,8 +4,9 @@
 	"import": [
 
 		{
+			"active": true,
+			"app": "import/import.py",
 			"url": "calendar.google.com/xyz",
-			"parser": "google",
 			"mapping": [
 					{ "google-id": "23", "room": "kilo" },
 					{ "google-id": "25", "room": "lima" },
@@ -14,14 +15,16 @@
 		},
 
 		{
-			"url": "calendar.google.com/aaa",
-			"parser": "wiki",
+			"active": false,
+			"app": "import/importwiki",
+			"url": "wiki.cae.hu/wikipage",
 			"mapping": [
 				{ "row": 1, "room": "bingo" },
 				{ "row": 2, "room": "hotel"}
 			]
 
 		}
+
 	],
 
 	"devices": [

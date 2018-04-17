@@ -1,4 +1,4 @@
 #!/bin/bash
 clear
 
-./app.py config.json
+./dispatcher.py config.json
