@@ -21,7 +21,29 @@ class Import:
 			+ str(now.day).zfill(2)
 		)
 
-		result = {
+		importItem = json.load(open(sys.argv[1]))
+
+		for mappingItem in importItem["mapping"]:
+
+			result = self.getResult()
+			
+			room = mappingItem["room"]
+			result["room"] = room
+			fnam = mappingItem["filename"]
+			result["date"] = self.date
+
+			# simulate some change
+			if room == "kilo":
+				r = str(random.randrange(300))
+				result["agenda"][0]["desc"] += " - " + r
+
+			with open(fnam,"w") as outFile:
+				json.dump(result,outFile)
+
+
+	def getResult(self):
+
+		return {
 			"agenda": [
 
 				{
@@ -37,24 +59,6 @@ class Import:
 
 			]
 		}
-
-		importItem = json.load(open(sys.argv[1]))
-
-		for mappingItem in importItem["mapping"]:
-
-			room = mappingItem["room"]
-			fnam = mappingItem["filename"]
-
-			result["room"] = room
-			result["date"] = self.date
-
-			# simulate some change
-			if room == "kilo":
-				r = str(random.randrange(300))
-				result["agenda"][0]["desc"] += " - " + r
-
-			with open(fnam,"w") as outFile:
-				json.dump(result,outFile)
 
 
 if __name__ == "__main__":

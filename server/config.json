@@ -32,6 +32,7 @@
 	"devices": [
 
 		{
+			"active": true,
 			"group": "kilo-double",
 			"room": "kilo",
 			"render": "image",
@@ -53,6 +54,7 @@
 		},
 
 		{
+			"active": false,
 			"group": "kilo-led",
 			"room": "kilo",
 			"render": "led",

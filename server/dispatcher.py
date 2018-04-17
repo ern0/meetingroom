@@ -8,6 +8,7 @@ import json
 import datetime
 import subprocess
 import fnmatch
+import hashlib
 
 
 class Dispatcher:
@@ -19,7 +20,9 @@ class Dispatcher:
 		self.loadConfig(sys.argv[1])
 		self.createWorkDir()
 
-		self.fetchImportData()
+		self.importData()
+		self.checkChanges()
+		self.formatData()
 
 
 	def note(self,msg):
@@ -59,7 +62,7 @@ class Dispatcher:
 		)
 		self.dataPrefix = os.path.abspath(
 			self.config["workdir"] 
-			+ "/agenda-data-"
+			+ "/agenda-"
 		)
 
 
@@ -86,7 +89,19 @@ class Dispatcher:
 		)
 
 
-	def fetchImportData(self):
+	def mkReqFnam(self,index):
+		return self.reqPrefix + str(index) + ".json"
+
+
+	def mkDataFnam(self,room):
+		return self.dataPrefix + room + ".json"
+
+
+	def mkHashFnam(self,room):
+		return self.dataPrefix + room + ".hash"
+
+
+	def importData(self):
 
 		self.updateStamp()
 
@@ -97,34 +112,18 @@ class Dispatcher:
 			self.fetchImportItem(importItem)
 			importIndex += 1
 
-		for importItem in self.config["import"]:
-			for mappingItem in importItem["mapping"]:
-				fnam = self.mkDataFnam( mappingItem["room"] )
-				print(fnam)
-
-
-	def mkReqFnam(self,index):
-		return self.reqPrefix + str(index) + ".json"
-
-
-	def mkDataFnam(self,room):
-		return self.dataPrefix + room + ".json"
-
 
 	def fetchImportItem(self,importItem):
 
-		self.noteFetchImportItem(importItem)
 		if not importItem["active"]: return
+		self.noteFetchImportItem(importItem)
 		self.performFetchImportItem(importItem)
 
 
 	def noteFetchImportItem(self,importItem):
 
-		if importItem["active"]: importItemName = "perform"
-		else: importItemName = "skip"
-
-		importItemName += (
-			" import"
+		importItemName = (
+			"import"
 			+ " fetcher=" + importItem["fetcher"]
 			+ " url=" + importItem["url"]
 		)
@@ -154,6 +153,71 @@ class Dispatcher:
 		# delete request file
 		if self.config["production"]:
 			os.remove(reqFileName)
+
+
+	def checkChanges(self):
+
+		self.changes = {}
+
+		for importItem in self.config["import"]:
+			if not importItem["active"]: continue
+			for mappingItem in importItem["mapping"]:
+				room = mappingItem["room"]
+				fnam = self.mkDataFnam(room)
+				hnam = self.mkHashFnam(room)
+
+				with open(fnam,"r") as dataFile:
+					data = dataFile.read()
+				actualHash = hashlib.md5(data.encode()).hexdigest()
+
+				try: 
+					with open(hnam,"r") as hashFile:
+						lastHash = hashFile.read().replace("\n","")
+				except FileNotFoundError:
+					lastHash = None
+		
+				if lastHash == actualHash: continue
+
+				with open(hnam,"w") as hashFile:
+					hashFile.write(actualHash)
+
+				self.changes[room] = None
+
+
+	def noteFormatDeviceItem(self,deviceItem):
+
+		self.note(
+			"format"
+			+ " renderer=" + deviceItem["render"]
+			+ " group=" + deviceItem["group"]
+		)
+
+
+	def formatData(self):
+
+		for deviceItem in self.config["devices"]:
+
+			if not deviceItem["active"]: continue
+			if deviceItem["room"] not in self.changes: continue
+
+			render = deviceItem["render"]
+			if render == "image":
+				self.noteFormatDeviceItem(deviceItem)
+				json = self.formatDataImage(deviceItem)
+			elif render == "led":
+				self.noteFormatDeviceItem(deviceItem)
+				json = self.formatDataLed(deviceItem)
+			else:
+				continue
+
+
+	def formatDataImage(self,deviceItem):
+
+		print(deviceItem)
+
+
+	def formatDataLed(self,deviceItem):
+		pass # TODO
 
 
 if __name__ == "__main__":
