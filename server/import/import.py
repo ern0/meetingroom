@@ -38,7 +38,7 @@ class Import:
 				result["agenda"][0]["desc"] += " - " + r
 
 			with open(fnam,"w") as outFile:
-				json.dump(result,outFile)
+				json.dump(result,outFile,indent=2)
 
 
 	def getResult(self):

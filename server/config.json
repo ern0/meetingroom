@@ -37,16 +37,18 @@
 			"room": "kilo",
 			"render": "image",
 			"title": "Kilo",
+			"slot-start": "08:00",
+			"slot-length": "00:30",
 			"slices": [
 				{
-					"device": "kilo-top",
-					"template": "cal-200x200bwr-top",
-					"cols": 23,
-					"rows": 15
+					"device": "kilo-head",
+					"template": "cal-200x200bwr-heading",
+					"cols": 21,
+					"rows": 14
 				},
 				{
-					"device": "kilo-top",
-					"template": "cal-200x200bwr-bottom",
+					"device": "kilo-tail",
+					"template": "cal-200x200bwr-headless",
 					"cols": 23,
 					"rows": 18
 				}
@@ -62,8 +64,8 @@
 				{
 					"device": "kilo-led",
 					"brightness": 30,
-					"slot-start": 800,
-					"slot-length": 30,
+					"slot-start": "08:00",
+					"slot-length": "00:30",
 					"slot-number": 16
 				}
 			]

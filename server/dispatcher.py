@@ -64,6 +64,14 @@ class Dispatcher:
 			self.config["workdir"] 
 			+ "/agenda-"
 		)
+		self.rawPrefix = os.path.abspath(
+			self.config["workdir"] 
+			+ "/raw-"
+		)
+		self.fmtPrefix = os.path.abspath(
+			self.config["workdir"] 
+			+ "/fmt-"
+		)
 
 
 	def createWorkDir(self):
@@ -99,6 +107,14 @@ class Dispatcher:
 
 	def mkHashFnam(self,room):
 		return self.dataPrefix + room + ".hash"
+
+
+	def mkRawFnam(self,room):
+		return self.rawPrefix + room + ".json"
+
+
+	def mkFmtFnam(self,room):
+		return self.fmtPrefix + room + ".json"
 
 
 	def importData(self):
@@ -141,7 +157,7 @@ class Dispatcher:
 		# create request file
 		reqFileName = self.mkReqFnam( importItem["index"] )
 		with open(reqFileName,"w") as reqFile:
-			json.dump(importItem,reqFile)
+			json.dump(importItem,reqFile,indent=2)
 
 		# call import app
 		app = os.path.abspath(importItem["fetcher"]) 
@@ -203,20 +219,91 @@ class Dispatcher:
 			render = deviceItem["render"]
 			if render == "image":
 				self.noteFormatDeviceItem(deviceItem)
-				json = self.formatDataImage(deviceItem)
+				json = self.formatImage(deviceItem)
 			elif render == "led":
 				self.noteFormatDeviceItem(deviceItem)
-				json = self.formatDataLed(deviceItem)
+				json = self.formatLed(deviceItem)
 			else:
 				continue
 
 
-	def formatDataImage(self,deviceItem):
+	def stampAdd(self,stamp1,stamp2):
 
-		print(deviceItem)
+		hour1 = int( stamp1.split(":")[0] )
+		min1 = int( stamp1.split(":")[1] )
+		hour2 = int( stamp2.split(":")[0] )
+		min2 = int( stamp2.split(":")[1] )
+
+		hour3 = hour1 + hour2
+		min3 = min1 + min2
+		if min3 >= 60:
+			min3 -= 60
+			hour3 += 1
+
+		return str(hour3).zfill(2) + ":" + str(min3).zfill(2)
 
 
-	def formatDataLed(self,deviceItem):
+	def stampToInt(self,stamp):
+		
+		r = int( stamp.split(":")[0] ) * 100
+		r += int( stamp.split(":")[1] )
+
+		return r
+
+
+	def formatImage(self,deviceItem):
+
+		result = {}
+		self.formatImageAgenda(deviceItem,result)
+		self.formatImageSlots(deviceItem,result)
+
+		rawFileName = self.mkRawFnam(deviceItem["room"])
+		with open(rawFileName,"w") as rawFile:
+			json.dump(result,rawFile,indent=2)
+
+
+	def formatImageAgenda(self,deviceItem,result):
+
+		fnam = self.mkDataFnam(deviceItem["room"])
+
+		try:
+			agenda = json.load(open(fnam))
+		except:
+			result["agenda"] = {}
+			return
+
+		result["agenda"] = agenda["agenda"]
+
+
+	def formatImageSlots(self,deviceItem,result):
+
+		result["rows"] = {}
+		slot = deviceItem["slot-start"]
+		rel = "past"
+
+		now = datetime.datetime.now()
+		now = str(now.hour) + ":" + str(now.minute)
+		now = self.stampToInt(now)
+
+		now = 1100
+
+		for sliceItem in deviceItem["slices"]:
+			for row in range(0,sliceItem["rows"]):
+
+				if now <= self.stampToInt(slot):
+					if rel == "past": rel = "now"
+					else: rel = "future"
+
+				result["rows"][slot] = {
+					"rel": rel,
+					"width": sliceItem["cols"]
+				}
+
+				slot = self.stampAdd(slot,deviceItem["slot-length"])
+
+
+
+	def formatLed(self,deviceItem):
 		pass # TODO
 
 
