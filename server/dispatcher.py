@@ -23,6 +23,7 @@ class Dispatcher:
 		self.importData()
 		self.checkDataChanges()
 		self.formatData()
+		self.transmitToDevices()
 
 
 	def note(self,msg):
@@ -58,19 +59,19 @@ class Dispatcher:
 
 		self.reqPrefix = os.path.abspath(
 			self.config["workdir"]
-			+ "/agenda-request-"
+			+ "/a-agenda-request-"
 		)
 		self.dataPrefix = os.path.abspath(
 			self.config["workdir"]
-			+ "/agenda-"
+			+ "/b-agenda-"
 		)
 		self.rawPrefix = os.path.abspath(
 			self.config["workdir"]
-			+ "/raw-"
+			+ "/c-raw-"
 		)
 		self.fmtPrefix = os.path.abspath(
 			self.config["workdir"]
-			+ "/fmt-"
+			+ "/d-fmt-"
 		)
 
 
@@ -121,6 +122,10 @@ class Dispatcher:
 		return self.fmtPrefix + room + ".json"
 
 
+	def mkFmtHashFnam(self,room):
+		return self.fmtPrefix + room + ".hash"
+
+
 	def importData(self):
 
 		self.updateStamp()
@@ -151,16 +156,28 @@ class Dispatcher:
 		with open(reqFileName,"w") as reqFile:
 			json.dump(importItem,reqFile,indent=2)
 
+
 		# call import app
 		app = os.path.abspath(importItem["fetcher"])
-		subprocess.check_output(
-			app + " " + reqFileName
-			,shell = True
-		).decode("utf-8")
+		r = self.callApp(app,reqFileName)
 
 		# delete request file
 		if self.config["production"]:
 			os.remove(reqFileName)
+		else:
+			print(r,end="")
+
+
+	def callApp(self,app,fnam1,fnam2 = None):
+
+		line = app
+		line += " " + fnam1
+		if fnam2 is not None: line += " " + fnam2
+
+		return subprocess.check_output(
+			line
+			,shell = True
+		).decode("utf-8")
 
 
 	def checkDataChanges(self):
@@ -202,19 +219,23 @@ class Dispatcher:
 	def formatData(self):
 
 		for deviceItem in self.config["devices"]:
+			room = deviceItem["room"]
 
 			if not deviceItem["active"]: continue
-			if deviceItem["room"] not in self.changes: continue
+			if room not in self.changes: continue
 
 			renderType = deviceItem["type"]
 			if renderType == "image":
-				json = self.formatImage(deviceItem)
+				itemChanged = self.formatImage(deviceItem)
 			elif renderType == "led":
-				json = self.formatLed(deviceItem)
+				itemChanged = self.formatLed(deviceItem)
 			elif renderType == "lamp":
-				json = self.formatLamp(deviceItem)
+				itemChanged = self.formatLamp(deviceItem)
 			else:
-				continue
+				itemChanged = False
+
+			if not itemChanged:
+				del self.changes[room]
 
 
 	def stampAdd(self,stamp1,stamp2):
@@ -243,19 +264,30 @@ class Dispatcher:
 
 	def formatImage(self,deviceItem):
 
+		room = deviceItem["room"]
+
 		result = {}
 		self.formatImageAgenda(deviceItem,result)
 		self.formatImageSlots(deviceItem,result)
 
-		rawFileName = self.mkRawDataFnam(deviceItem["room"])
+		rawFileName = self.mkRawDataFnam(room)
 		with open(rawFileName,"w") as rawFile:
 			json.dump(result,rawFile,indent=2)
 
-		hashFileName = self.mkRawHashFnam(deviceItem["room"])
+		hashFileName = self.mkRawHashFnam(room)
 		if not self.checkChanges(rawFileName,hashFileName): 
-			return
+			return False
 
-		print(rawFileName)
+		app = os.path.abspath(deviceItem["formatter"])
+		fmtFileName = self.mkFmtFnam(room)
+		r = self.callApp(app,rawFileName,fmtFileName)
+		if not self.config["production"]: print(r,end="")
+
+		hashFileName = self.mkFmtHashFnam(room)
+		if not self.checkChanges(fmtFileName,hashFileName): 
+			return False
+
+		return True
 
 
 	def formatImageAgenda(self,deviceItem,result):
@@ -308,6 +340,11 @@ class Dispatcher:
 
 	def formatLamp(self,deviceItem):
 		pass # TODO
+
+
+	def transmitToDevices(self):
+
+		print(self.changes)
 
 
 if __name__ == "__main__":
