@@ -35,7 +35,9 @@
 			"active": true,
 			"group": "kilo-double",
 			"room": "kilo",
-			"render": "image",
+ 			"type": "image",
+ 			"formatter": "format/format.py",
+ 			"renderer": "render/imagerender.py",
 			"title": "Kilo",
 			"slot-start": "08:00",
 			"slot-length": "00:30",
@@ -59,7 +61,7 @@
 			"active": false,
 			"group": "kilo-led",
 			"room": "kilo",
-			"render": "led",
+			"type": "led",
 			"slices": [
 				{
 					"device": "kilo-led",

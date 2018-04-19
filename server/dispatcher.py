@@ -21,7 +21,7 @@ class Dispatcher:
 		self.createWorkDir()
 
 		self.importData()
-		self.checkChanges()
+		self.checkDataChanges()
 		self.formatData()
 
 
@@ -97,20 +97,24 @@ class Dispatcher:
 		)
 
 
-	def mkReqFnam(self,index):
+	def mkRequestFnam(self,index):
 		return self.reqPrefix + str(index) + ".json"
 
 
-	def mkDataFnam(self,room):
+	def mkAgendaDataFnam(self,room):
 		return self.dataPrefix + room + ".json"
 
 
-	def mkHashFnam(self,room):
+	def mkAgendaHashFnam(self,room):
 		return self.dataPrefix + room + ".hash"
 
 
-	def mkRawFnam(self,room):
+	def mkRawDataFnam(self,room):
 		return self.rawPrefix + room + ".json"
+
+
+	def mkRawHashFnam(self,room):
+		return self.rawPrefix + room + ".hash"
 
 
 	def mkFmtFnam(self,room):
@@ -132,30 +136,18 @@ class Dispatcher:
 	def fetchImportItem(self,importItem):
 
 		if not importItem["active"]: return
-		self.noteFetchImportItem(importItem)
 		self.performFetchImportItem(importItem)
-
-
-	def noteFetchImportItem(self,importItem):
-
-		importItemName = (
-			"import"
-			+ " fetcher=" + importItem["fetcher"]
-			+ " url=" + importItem["url"]
-		)
-
-		self.note(importItemName)
 
 
 	def performFetchImportItem(self,importItem):
 
 		# insert output file names into config
 		for mappingItem in importItem["mapping"]:
-			fnam = self.mkDataFnam( mappingItem["room"] )
+			fnam = self.mkAgendaDataFnam( mappingItem["room"] )
 			mappingItem["filename"] = fnam
 
 		# create request file
-		reqFileName = self.mkReqFnam( importItem["index"] )
+		reqFileName = self.mkRequestFnam( importItem["index"] )
 		with open(reqFileName,"w") as reqFile:
 			json.dump(importItem,reqFile,indent=2)
 
@@ -171,7 +163,7 @@ class Dispatcher:
 			os.remove(reqFileName)
 
 
-	def checkChanges(self):
+	def checkDataChanges(self):
 
 		self.changes = {}
 
@@ -179,34 +171,32 @@ class Dispatcher:
 			if not importItem["active"]: continue
 			for mappingItem in importItem["mapping"]:
 				room = mappingItem["room"]
-				fnam = self.mkDataFnam(room)
-				hnam = self.mkHashFnam(room)
+				fnam = self.mkAgendaDataFnam(room)
+				hnam = self.mkAgendaHashFnam(room)
 
-				with open(fnam,"r") as dataFile:
-					data = dataFile.read()
-				actualHash = hashlib.md5(data.encode()).hexdigest()
-
-				try:
-					with open(hnam,"r") as hashFile:
-						lastHash = hashFile.read().replace("\n","")
-				except FileNotFoundError:
-					lastHash = None
-
-				if lastHash == actualHash: continue
-
-				with open(hnam,"w") as hashFile:
-					hashFile.write(actualHash)
-
+				if not self.checkChanges(fnam,hnam): continue
+		
 				self.changes[room] = None
 
 
-	def noteFormatDeviceItem(self,deviceItem):
+	def checkChanges(self,fnam,hnam):
 
-		self.note(
-			"format"
-			+ " renderer=" + deviceItem["render"]
-			+ " group=" + deviceItem["group"]
-		)
+		with open(fnam,"r") as dataFile:
+			data = dataFile.read()
+		actualHash = hashlib.md5(data.encode()).hexdigest()
+
+		try:
+			with open(hnam,"r") as hashFile:
+				lastHash = hashFile.read().replace("\n","")
+		except FileNotFoundError:
+			lastHash = None
+
+		if lastHash == actualHash: return False
+
+		with open(hnam,"w") as hashFile:
+			hashFile.write(actualHash)
+
+		return True
 
 
 	def formatData(self):
@@ -216,13 +206,13 @@ class Dispatcher:
 			if not deviceItem["active"]: continue
 			if deviceItem["room"] not in self.changes: continue
 
-			render = deviceItem["render"]
-			if render == "image":
-				self.noteFormatDeviceItem(deviceItem)
+			renderType = deviceItem["type"]
+			if renderType == "image":
 				json = self.formatImage(deviceItem)
-			elif render == "led":
-				self.noteFormatDeviceItem(deviceItem)
+			elif renderType == "led":
 				json = self.formatLed(deviceItem)
+			elif renderType == "lamp":
+				json = self.formatLamp(deviceItem)
 			else:
 				continue
 
@@ -257,14 +247,20 @@ class Dispatcher:
 		self.formatImageAgenda(deviceItem,result)
 		self.formatImageSlots(deviceItem,result)
 
-		rawFileName = self.mkRawFnam(deviceItem["room"])
+		rawFileName = self.mkRawDataFnam(deviceItem["room"])
 		with open(rawFileName,"w") as rawFile:
 			json.dump(result,rawFile,indent=2)
+
+		hashFileName = self.mkRawHashFnam(deviceItem["room"])
+		if not self.checkChanges(rawFileName,hashFileName): 
+			return
+
+		print(rawFileName)
 
 
 	def formatImageAgenda(self,deviceItem,result):
 
-		fnam = self.mkDataFnam(deviceItem["room"])
+		fnam = self.mkAgendaDataFnam(deviceItem["room"])
 
 		try:
 			agenda = json.load(open(fnam))
@@ -307,6 +303,10 @@ class Dispatcher:
 
 
 	def formatLed(self,deviceItem):
+		pass # TODO
+
+
+	def formatLamp(self,deviceItem):
 		pass # TODO
 
 

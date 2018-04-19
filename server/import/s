@@ -1,5 +1,0 @@
-#!/bin/bash
-clear
-
-mkdir -p /tmp/meetingroom/
-./import.py ../config.json
