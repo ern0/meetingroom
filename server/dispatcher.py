@@ -57,19 +57,19 @@ class Dispatcher:
 		self.configFileName = os.path.abspath(fnam)
 
 		self.reqPrefix = os.path.abspath(
-			self.config["workdir"] 
+			self.config["workdir"]
 			+ "/agenda-request-"
 		)
 		self.dataPrefix = os.path.abspath(
-			self.config["workdir"] 
+			self.config["workdir"]
 			+ "/agenda-"
 		)
 		self.rawPrefix = os.path.abspath(
-			self.config["workdir"] 
+			self.config["workdir"]
 			+ "/raw-"
 		)
 		self.fmtPrefix = os.path.abspath(
-			self.config["workdir"] 
+			self.config["workdir"]
 			+ "/fmt-"
 		)
 
@@ -160,7 +160,7 @@ class Dispatcher:
 			json.dump(importItem,reqFile,indent=2)
 
 		# call import app
-		app = os.path.abspath(importItem["fetcher"]) 
+		app = os.path.abspath(importItem["fetcher"])
 		subprocess.check_output(
 			app + " " + reqFileName
 			,shell = True
@@ -186,12 +186,12 @@ class Dispatcher:
 					data = dataFile.read()
 				actualHash = hashlib.md5(data.encode()).hexdigest()
 
-				try: 
+				try:
 					with open(hnam,"r") as hashFile:
 						lastHash = hashFile.read().replace("\n","")
 				except FileNotFoundError:
 					lastHash = None
-		
+
 				if lastHash == actualHash: continue
 
 				with open(hnam,"w") as hashFile:
@@ -244,7 +244,7 @@ class Dispatcher:
 
 
 	def stampToInt(self,stamp):
-		
+
 		r = int( stamp.split(":")[0] ) * 100
 		r += int( stamp.split(":")[1] )
 
@@ -285,22 +285,25 @@ class Dispatcher:
 		now = str(now.hour) + ":" + str(now.minute)
 		now = self.stampToInt(now)
 
-		now = 1100
-
+		lastResultItem = None
+		nowPassed = False
 		for sliceItem in deviceItem["slices"]:
 			for row in range(0,sliceItem["rows"]):
 
-				if now <= self.stampToInt(slot):
-					if rel == "past": rel = "now"
-					else: rel = "future"
+				if not nowPassed:
+					if now <= self.stampToInt(slot):
+						rel = "future"
+						if lastResultItem is not None:
+							lastResultItem["rel"] = "now"
+						nowPassed = True
 
 				result["rows"][slot] = {
 					"rel": rel,
 					"width": sliceItem["cols"]
 				}
+				lastResultItem = result["rows"][slot]
 
 				slot = self.stampAdd(slot,deviceItem["slot-length"])
-
 
 
 	def formatLed(self,deviceItem):
