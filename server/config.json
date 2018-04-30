@@ -7,13 +7,11 @@
 
 		{
 			"active": true,
-			"fetcher": "import/import.py",
-			"url": "calendar.google.com/xyz",
+			"fetcher": "import/gcal.py",
+			"url": "https://calendar.google.com/calendar/ical/ba8tfhe3c6ocpb3b5jrqk6t8b0%40group.calendar.google.com/private-74799f960238eb4784475391bb8cc205/basic.ics",
 			"mapping": [
-					{ "google-id": "23", "room": "kilo" },
-					{ "google-id": "25", "room": "lima" },
-					{ "google-id": "77", "room": "alpha" }
-				]
+				{ "room": "kilo" }
+			]
 		},
 
 		{

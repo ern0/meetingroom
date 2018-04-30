@@ -90,11 +90,11 @@ class Dispatcher:
 
 	def updateStamp(self):
 
-		now = datetime.datetime.now()
+		self.now = datetime.datetime.now()
 		self.stamp = (
-			str(now.year)
-			+ str(now.month).zfill(2)
-			+ str(now.day).zfill(2)
+			str(self.now.year)
+			+ str(self.now.month).zfill(2)
+			+ str(self.now.day).zfill(2)
 		)
 
 
@@ -134,6 +134,7 @@ class Dispatcher:
 		for importItem in self.config["import"]:
 			importItem["index"] = importIndex
 			importItem["production"] = self.config["production"]
+			importItem["date"] = self.now.isoformat()[0:10]
 			self.fetchImportItem(importItem)
 			importIndex += 1
 
@@ -155,7 +156,6 @@ class Dispatcher:
 		reqFileName = self.mkRequestFnam( importItem["index"] )
 		with open(reqFileName,"w") as reqFile:
 			json.dump(importItem,reqFile,indent=2)
-
 
 		# call import app
 		app = os.path.abspath(importItem["fetcher"])

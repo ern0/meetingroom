@@ -2,3 +2,5 @@
 clear
 
 ./dispatcher.py config.json
+echo --
+cat /tmp/meetingroom/b-agenda-kilo.json
