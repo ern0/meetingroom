@@ -1,0 +1,13 @@
+#!/bin/bash
+
+PRJ=esp8266
+
+clear
+rm -f .pioenvs/${PRJ}/firmware.bin
+
+#pio run -e ${PRJ} ; exit
+
+pio run -e ${PRJ} -t upload
+if [ -f .pioenvs/${PRJ}/firmware.bin ]; then
+	./q
+fi
