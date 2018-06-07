@@ -34,19 +34,19 @@ class GoogleCalendarImport:
 					outFile,
 					indent=2,
 					ensure_ascii=False
-				).encode("utf-8")
+				)
 
 
 	def fetch(self):
 
-		if True:
+		if False:
 			f = open("import/gcal-sample.txt","r")
 			self.page = f.read()
 			f.close()
 
 		else:
 			req = urllib.request.urlopen(self.config["url"])
-			self.page = req.read()
+			self.page = str(req.read())
 
 		self.lines = self.page.split("\n")
 
