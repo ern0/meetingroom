@@ -1,4 +1,4 @@
-from icalendar import Calendar,Event
+from icalendar import Calendar
 from datetime import datetime, date
 
 class CalendarTools:
@@ -20,9 +20,14 @@ class CalendarTools:
         '''Return all events on a specific day'''
         results = []
         for event in CalendarTools.get_events(calendar):
+            #start and end date is sometimes stored as date (all day event)
+            #sometimes stored as datetime. For this comparism we use the date
+            #component only.
             start_date = CalendarTools.get_date_component(event.get('dtstart').dt)
             end_date = CalendarTools.get_date_component(event.get('dtend').dt)
-            if start_date <= day <= end_date:
+
+            if start_date <= day <= end_date: # Check if evetn is 'active' at a
+                                              # given date.
                 results.append(event)
         return results
 
@@ -34,9 +39,9 @@ class CalendarTools:
 '''
 TEST
 '''
-with open('november.ics','rb') as data:
-    calendar = Calendar.from_ical(data.read())
-    search_date = date(year=2017, month=2, day=22)
+with open('november.ics','rb') as data: # Open test data ics file.
+    calendar = Calendar.from_ical(data.read()) # Parse test data as ical.
+    search_date = date(year=2017, month=2, day=22) # Define querry date.
     events = CalendarTools.get_events_by_date(day=search_date,calendar=calendar)
     for event in events:
         print('{} :: {}'.format(event.get('summary'), event.get('dtstart').dt))
