@@ -1,57 +1,57 @@
 from icalendar import Calendar
 from datetime import datetime, date
-input json
-template ='''
-{
-  "mapping": [
-    {
-      "room": "kilo",
-      "input": "kilo.ics",
-      "output": "/tmp/meetingroom/b-agenda-kilo.json"
-    }
-  ],
-  "production": false,
-  "date": "2018-07-04"
-}
-'''
+import json
+
 class AgendaItem(object):
+    '''Plain old data class to store agenda items.'''
+
     def __init__(self, rawEvent):
+        '''Initialize data class'''
+        # Store begin date and time in format 'YYYY-MM-DDTHH:MM'.
         self.begin = '"{}T{}:{}"'.format(
             rawEvent.get('dtstart').dt.date()
             ,rawEvent.get('dtstart').dt.hour
             ,str(rawEvent.get('dtstart').dt.minute).zfill(2)
-            )
+        )
+
+        # Store end date and time in format 'YYYY-MM-DDTHH:MM'.
         self.end = '"{}T{}:{}"'.format(
             rawEvent.get('dtend').dt.date()
             ,rawEvent.get('dtend').dt.hour
             ,str(rawEvent.get('dtend').dt.minute).zfill(2)
-            )
+        )
+
+        # Store description.
         self.desc = '"{}"'.format(rawEvent.get('summary'))
 
-    def __str__(self):
-        return "{} {} {}".format(self.begin, self.end, self.desc)
-
     def reprJSON(self):
+        '''Make the class JSON serializable'''
         return '''
         {{
             "begin": {},
             "end": {},
             "desc": {}
         }}'''.format(
-        self.begin
-        ,self.end
-        ,self.desc
+            self.begin
+            ,self.end
+            ,self.desc
         )
 
 class CAECalendarData(object):
+    '''This data class stores basic information about the meeting room'''
+
     def __init__(self, room:str, date:str):
+        '''Initialize data class'''
         self.room = room
         self.date = date
         self.agenda = []
+
     def addEvent(self, event:AgendaItem):
+        '''Appends an event to the event list'''
         self.agenda.append(event)
 
     def reprJSON(self):
+        '''Make the class JSON serializable'''
         event_list = ',\n'.join([a.reprJSON() for a in self.agenda])
         return '''
         {{
@@ -62,16 +62,17 @@ class CAECalendarData(object):
             "room": "{}",
             "date": "{}"
         }}'''.format(
-        event_list
-        ,self.room
-        ,self.date
+            event_list
+            ,self.room
+            ,self.date
         )
 
 class CAECalendar(Calendar):
+    '''Calendar representation and basic querry functions'''
+
     def __init__(self):
         Calendar(self)
 
-    '''Static class for querrying calendar events'''
     def get_date_component(self, dt):
         ''' Return date part of datetime types'''
         if type(dt) is datetime:
@@ -105,13 +106,72 @@ class CAECalendar(Calendar):
         today = date.today()
         return CAECalendar().get_events_by_date(today, calendar)
 
+class JSONCalendarFormatter:
+    '''This class reads JSON requests and returns the JSON representation of
+    a given ical file.'''
+    def fetch(self, request):
+        '''Takes the JSON input file and returns the JSON calendar representation.'''
+
+        json_input = json.loads(request)
+
+        for mapping in json_input['mapping']:
+            #Loop all mappings(~sub-requests) in the original JSON requests
+            ics_input = mapping['input']
+            json_output = mapping['output']
+            #Parse events from ics file.
+            events = JSONCalendarFormatter().__parse_ics(ics_input, json_input['date'])
+            #Create CAECalendarData instance to store ics elements.
+            calendar_data = CAECalendarData(
+                ics_input
+                ,json_input['date']
+            )
+            # Stor events in the calendar data class.
+            for event in events:
+                calendar_data.addEvent(AgendaItem(event))
+
+            JSONCalendarFormatter().__dumps(calendar_data, json_output)
+
+
+    def __parse_ics(self, ics, date_str):
+        '''Parse ics file and return event list.'''
+
+        with open(ics) as calendar_file:
+            calendar = Calendar.from_ical(calendar_file.read())
+            return CAECalendar().get_events_by_date(
+                JSONCalendarFormatter().__date_str_to_date(date_str)
+                , calendar
+            )
+
+    def __date_str_to_date(self, date_str):
+        '''create date object form string (format "YYYY-MM-DD")'''
+        year, month, day = date_str.split('-')
+        return date(
+            year=int(year)
+            , month=int(month)
+            , day=int(day)
+        )
+
+    def __dumps(self, calendar_data, json_output):
+        '''Dump to output JOSN file.'''
+        with open(json_output,'w') as ofile:
+            json_repr = json.loads(calendar_data.reprJSON())
+            json.dump(json_repr, ofile)
+
+
 if __name__ == "__main__":
+    ''' Basic test of functionality'''
+    test_request ='''
+    {
+      "mapping": [
+        {
+          "room": "november",
+          "input": "november.ics",
+          "output": "/tmp/meetingroom/b-agenda-kilo.json"
+        }
+      ],
+      "production": false,
+      "date": "2017-02-22"
+    }
+    '''
     with open('november.ics','rb') as data: # Open test data ics file.
-        calendar = Calendar.from_ical(data.read()) # Parse test data as ical.
-        search_date = date(year=2017, month=2, day=22) # Define querry date.
-        todayData = CAECalendarData('kilo', '2017-02-22')
-        events = CAECalendar().get_events_by_date(day=search_date, calendar=calendar)
-        for event in CAECalendar().get_events_by_date(day=search_date, calendar=calendar):
-            todayData.addEvent(AgendaItem(event))
-            todayData.addEvent(AgendaItem(event))
-        print(todayData.reprJSON())
+        JSONCalendarFormatter().fetch(test_request)
