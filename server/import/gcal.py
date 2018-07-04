@@ -39,7 +39,7 @@ class GoogleCalendarImport:
 
 	def fetch(self):
 
-		if False:
+		if True:
 			f = open("import/gcal-sample.txt","r")
 			self.page = f.read()
 			f.close()
