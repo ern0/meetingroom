@@ -106,11 +106,18 @@ class CAECalendar(Calendar):
         today = date.today()
         return CAECalendar().get_events_by_date(today, calendar)
 
-class JSONCalendarFormatter:
+class ICalFetcher:
     '''This class reads JSON requests and returns the JSON representation of
     a given ical file.'''
+
+    def file_fetch(self, ifile):
+        '''Takes the JSON request file and returns the JSON calendar representation.'''
+        with open(ifile, 'r') as input:
+            request = input.read()
+            ICalFetcher().fetch(request)
+
     def fetch(self, request):
-        '''Takes the JSON input file and returns the JSON calendar representation.'''
+        '''Takes the JSON request and returns the JSON calendar representation.'''
 
         json_input = json.loads(request)
 
@@ -119,7 +126,7 @@ class JSONCalendarFormatter:
             ics_input = mapping['input']
             json_output = mapping['output']
             #Parse events from ics file.
-            events = JSONCalendarFormatter().__parse_ics(ics_input, json_input['date'])
+            events = ICalFetcher().__parse_ics(ics_input, json_input['date'])
             #Create CAECalendarData instance to store ics elements.
             calendar_data = CAECalendarData(
                 ics_input
@@ -129,7 +136,7 @@ class JSONCalendarFormatter:
             for event in events:
                 calendar_data.addEvent(AgendaItem(event))
 
-            JSONCalendarFormatter().__dumps(calendar_data, json_output)
+            ICalFetcher().__dumps(calendar_data, json_output)
 
 
     def __parse_ics(self, ics, date_str):
@@ -138,7 +145,7 @@ class JSONCalendarFormatter:
         with open(ics) as calendar_file:
             calendar = Calendar.from_ical(calendar_file.read())
             return CAECalendar().get_events_by_date(
-                JSONCalendarFormatter().__date_str_to_date(date_str)
+                ICalFetcher().__date_str_to_date(date_str)
                 , calendar
             )
 
@@ -173,5 +180,4 @@ if __name__ == "__main__":
       "date": "2017-02-22"
     }
     '''
-    with open('november.ics','rb') as data: # Open test data ics file.
-        JSONCalendarFormatter().fetch(test_request)
+    ICalFetcher().fetch(test_request)

@@ -11,7 +11,8 @@
 			"mapping": [
 				{
 					"room": "kilo",
-					"file": "kilo.json"
+					"input": "kilo.ics"
+					"output": "kilo.json"
 				}
 			]
 		},
